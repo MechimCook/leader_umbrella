@@ -1,0 +1,43 @@
+<h1>Show Lead</h1>
+
+<ul>
+
+  <li>
+    <strong>Company:</strong>
+    <%= @lead.company %>
+  </li>
+
+  <li>
+    <strong>First name:</strong>
+    <%= @lead.first_name %>
+  </li>
+
+  <li>
+    <strong>Last name:</strong>
+    <%= @lead.last_name %>
+  </li>
+
+  <li>
+    <strong>Email:</strong>
+    <%= @lead.email %>
+  </li>
+
+  <li>
+    <strong>Phone:</strong>
+    <%= @lead.phone %>
+  </li>
+
+  <li>
+    <strong>State:</strong>
+    <%= @lead.state %>
+  </li>
+
+  <li>
+    <strong>Comments:</strong>
+    <%= @lead.comments %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: Routes.lead_path(@conn, :edit, @lead) %></span>
+<span><%= link "Back", to: Routes.lead_path(@conn, :index) %></span>

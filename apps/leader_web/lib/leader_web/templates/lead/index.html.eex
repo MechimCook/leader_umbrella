@@ -1,0 +1,38 @@
+<h1>Listing Leads</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Company</th>
+      <th>First name</th>
+      <th>Last name</th>
+      <th>Email</th>
+      <th>Phone</th>
+      <th>State</th>
+      <th>Comments</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for lead <- @leads do %>
+    <tr>
+      <td><%= lead.company %></td>
+      <td><%= lead.first_name %></td>
+      <td><%= lead.last_name %></td>
+      <td><%= lead.email %></td>
+      <td><%= lead.phone %></td>
+      <td><%= lead.state %></td>
+      <td><%= lead.comments %></td>
+
+      <td>
+        <span><%= link "Show", to: Routes.lead_path(@conn, :show, lead) %></span>
+        <span><%= link "Edit", to: Routes.lead_path(@conn, :edit, lead) %></span>
+        <span><%= link "Delete", to: Routes.lead_path(@conn, :delete, lead), method: :delete, data: [confirm: "Are you sure?"] %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Lead", to: Routes.lead_path(@conn, :new) %></span>
