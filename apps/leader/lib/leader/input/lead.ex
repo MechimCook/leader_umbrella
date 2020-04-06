@@ -18,6 +18,6 @@ defmodule Leader.Input.Lead do
   def changeset(lead, attrs) do
     lead
     |> cast(attrs, [:company, :first_name, :last_name, :email, :phone, :state, :comments])
-    |> validate_required([:company, :first_name, :last_name, :email, :phone, :state, :comments])
+    |> validate_format(:email, ~r/@/)
   end
 end
