@@ -6,11 +6,7 @@
       <th>Company</th>
       <th>First name</th>
       <th>Last name</th>
-      <th>Email</th>
-      <th>Phone</th>
-      <th>State</th>
-      <th>Comments</th>
-
+      <th>state</th>
       <th></th>
     </tr>
   </thead>
@@ -20,10 +16,7 @@
       <td><%= lead.company %></td>
       <td><%= lead.first_name %></td>
       <td><%= lead.last_name %></td>
-      <td><%= lead.email %></td>
-      <td><%= lead.phone %></td>
       <td><%= lead.state %></td>
-      <td><%= lead.comments %></td>
 
       <td>
         <span><%= link "Show", to: Routes.lead_path(@conn, :show, lead) %></span>
