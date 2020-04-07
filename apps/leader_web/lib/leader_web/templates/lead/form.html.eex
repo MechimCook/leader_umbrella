@@ -5,52 +5,31 @@
     </div>
   <% end %>
 
-  <%= label f, :company %>
-  <%= text_input f, :company%>
+  <%= PhoenixBootstrapForm.text_input f, :company%>
   <%= error_tag f, :company %>
 
-  <span style ="display: flex;">
-    <div style ="margin-right: auto;">
-    <%= label f, :first_name %>
-  </div>
-  <div style ="margin-right: auto;">
-  <%= label f, :last_name %>
-</div>
-  </span>
+  <%= PhoenixBootstrapForm.text_input f, :first_name %>
+  <%= error_tag f, :first_name %>
 
-<span style ="display: flex;">
-  <%= text_input f, :email %>
+  <%= PhoenixBootstrapForm.text_input f, :last_name %>
+  <%= error_tag f, :last_name %>
+
+  <%= PhoenixBootstrapForm.text_input f, :email %>
   <%= error_tag f, :email %>
 
-  <%= text_input f, :phone %>
+  <%= PhoenixBootstrapForm.text_input f, :phone %>
   <%= error_tag f, :phone %>
-</span>
-<span style ="display: flex;">
-  <div style ="margin-right: auto;">
-  <%= label f, :email %>
-</div>
-<div style ="margin-right: auto;">
-<%= label f, :phone %>
-</div>
-</span>
-<span style ="display: flex;">
-<%= text_input f, :email %>
-<%= error_tag f, :email %>
 
-<%= telephone_input f, :phone %>
-<%= error_tag f, :phone %>
-</span>
 
-  <%= label f, :state %>
-  <%= text_input f, :state %>
+
+  <%= PhoenixBootstrapForm.text_input f, :state %>
   <%= error_tag f, :state %>
 
-  <%= label f, :comments %>
-  <%= textarea f, :comments %>
+  <%= PhoenixBootstrapForm.textarea f, :comments %>
   <%= error_tag f, :comments %>
 
 
   <div>
-    <%= submit "Save" %>
+    <%= PhoenixBootstrapForm.submit f %>
   </div>
 <% end %>
