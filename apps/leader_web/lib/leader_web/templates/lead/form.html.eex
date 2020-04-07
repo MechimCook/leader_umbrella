@@ -5,31 +5,37 @@
     </div>
   <% end %>
 
-  <%= PhoenixBootstrapForm.text_input f, :company%>
-  <%= error_tag f, :company %>
-
-  <%= PhoenixBootstrapForm.text_input f, :first_name %>
-  <%= error_tag f, :first_name %>
-
-  <%= PhoenixBootstrapForm.text_input f, :last_name %>
-  <%= error_tag f, :last_name %>
-
-  <%= PhoenixBootstrapForm.text_input f, :email %>
-  <%= error_tag f, :email %>
-
-  <%= PhoenixBootstrapForm.text_input f, :phone %>
-  <%= error_tag f, :phone %>
-
-
-
-  <%= PhoenixBootstrapForm.text_input f, :state %>
-  <%= error_tag f, :state %>
-
-  <%= PhoenixBootstrapForm.textarea f, :comments %>
-  <%= error_tag f, :comments %>
-
-
-  <div>
-    <%= PhoenixBootstrapForm.submit f %>
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label for="inputEmail4">Email</label>
+      <%= text_input f, :company%>
+    </div>
+    <div class="form-group col-md-6">
+      <label for="inputPassword4">Password</label>
+      <%= text_input f, :company%>
+    </div>
   </div>
+  <div class="form-group">
+    <label for="inputAddress">Address</label>
+    <%= text_input f, :company%>
+  </div>
+  <div class="form-group">
+    <label for="inputAddress2">Address 2</label>
+  <%= text_input f, :company%>
+  </div>
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label for="inputCity">City</label>
+    <%= text_input f, :company%>
+    </div>
+    <div class="form-group col-md-4">
+      <label for="inputState">State</label>
+      <%= text_input f, :company%>
+    </div>
+    <div class="form-group col-md-2">
+      <label for="inputZip">Zip</label>
+      <%= text_input f, :company%>
+    </div>
+  </div>
+  <%= submit "Save" %>
 <% end %>
