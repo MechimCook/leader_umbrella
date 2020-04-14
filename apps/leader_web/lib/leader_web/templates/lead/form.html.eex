@@ -5,37 +5,107 @@
     </div>
   <% end %>
 
+  <div class="form-group">
+    <label for="inputAddress">Company</label>
+    <%= text_input f, :company%>
+  </div>
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label for="inputEmail4">First name</label>
+      <%= text_input f, :first_name%>
+    </div>
+    <div class="form-group col-md-6">
+      <label for="inputPassword4">Last name</label>
+      <%= text_input f, :last_name%>
+    </div>
+  </div>
   <div class="form-row">
     <div class="form-group col-md-6">
       <label for="inputEmail4">Email</label>
-      <%= text_input f, :company%>
+      <%= text_input f, :email%>
     </div>
     <div class="form-group col-md-6">
-      <label for="inputPassword4">Password</label>
-      <%= text_input f, :company%>
+      <label for="inputPassword4">phone</label>
+      <%= text_input f, :phone%>
     </div>
   </div>
   <div class="form-group">
     <label for="inputAddress">Address</label>
-    <%= text_input f, :company%>
+    <%= text_input f, :Address%>
   </div>
-  <div class="form-group">
-    <label for="inputAddress2">Address 2</label>
-  <%= text_input f, :company%>
-  </div>
+
   <div class="form-row">
     <div class="form-group col-md-6">
       <label for="inputCity">City</label>
-    <%= text_input f, :company%>
-    </div>
-    <div class="form-group col-md-4">
-      <label for="inputState">State</label>
-      <%= text_input f, :company%>
+    <%= text_input f, :city%>
     </div>
     <div class="form-group col-md-2">
+      <label for="inputState">State</label>
+      <%= select(f, :state, [Select: "", Florida: "FL", wisconson: "WS"]) %>
+    </div>
+    <div class="form-group col-md-4">
       <label for="inputZip">Zip</label>
-      <%= text_input f, :company%>
+      <%= text_input f, :zip%>
     </div>
   </div>
+
+  <div class="form-row" >
+    <div class="form-group col-md-2">
+      <div class="form-check form-check-inline">
+        <%= checkbox(f, :catalog) %>
+      <label class="form-check-label" for="inlineCheckbox1">Catalog</label>
+      </div>
+    </div>
+    <div class="form-group col-md-5">
+      <div class="form-check form-check-inline">
+        <%= checkbox(f, :hot) %>
+      <label class="form-check-label" for="inlineCheckbox1">Hot</label>
+      </div>
+    </div>
+  <div class="form-group col-md-5">
+  </div>
+</div>
+
+<div class="form-row justify-content-md-center " >
+  <label >Orders</label>
+</div>
+  <%=
+    row1_columns = [["col-md-4", [:Quantity, "text_input"]],["col-md-4", [:Volume, "text_input"]],["col-md-2", [:Remove, "remove"]]]
+    row1 = ["form-row justify-content-md-center mt-2", row1_columns]
+    row2_column1 = ["col-md-6", [:Bottles, "checkbox", :Jars, "checkbox", :Roll_ons, "checkbox", :Tubes, "checkbox"]]
+    row2_column2 = ["col-md-5", [:Aluminum, "checkbox", :Glass, "checkbox", :Plastic, "checkbox"]]
+    row2_columns = [row2_column1, row2_column2]
+    row2 = ["form-row justify-content-md-end mt-2", row2_columns]
+    orders f, :orders, [row1, row2] %>
+    <%= order_add_button f, :orders %>
+
+
+  <div class="form-group">
+    <label>Comments</label>
+    <%= textarea f, :Comments%>
+  </div>
+
+
   <%= submit "Save" %>
 <% end %>
+
+<button onclick="myFunction()">Try it</button>
+
+
+
+<script>
+var count = 1;
+function myFunction() {
+  var itm = document.getElementById("lead_orders_0");
+  var cln = itm.cloneNode(true);
+  cln.id = "lead_orders_" + count;
+  count += 1;
+  document.getElementById("lead_orders_container").appendChild(cln);
+}
+
+function removeElement(elementId) {
+    // Removes an element from the document
+    var element = document.getElementById(elementId);
+    element.parentNode.removeChild(element);
+}
+</script>

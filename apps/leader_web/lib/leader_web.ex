@@ -41,6 +41,7 @@ defmodule LeaderWeb do
       import LeaderWeb.ErrorHelpers
       import LeaderWeb.Gettext
       alias LeaderWeb.Router.Helpers, as: Routes
+      import LeaderWeb.InputHelpers
     end
   end
 
