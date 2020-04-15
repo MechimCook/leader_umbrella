@@ -50,34 +50,32 @@
   </div>
 
   <div class="form-row" >
-    <div class="form-group col-md-2">
-      <div class="form-check form-check-inline">
-        <%= checkbox(f, :catalog) %>
-      <label class="form-check-label" for="inlineCheckbox1">Catalog</label>
-      </div>
-    </div>
-    <div class="form-group col-md-5">
-      <div class="form-check form-check-inline">
-        <%= checkbox(f, :hot) %>
-      <label class="form-check-label" for="inlineCheckbox1">Hot</label>
-      </div>
-    </div>
-  <div class="form-group col-md-5">
+    <div class="form-group col-auto">
+<div class="form-check form-check-inline" data-index="1">
+  <input class="mt-2"  name="catalog" type="checkbox" value="true">
+  <label class="ml-3">Catalog</label>
   </div>
+    </div>
+    <div class="form-group col-auto">
+<div class="form-check form-check-inline" data-index="1">
+  <input class="mt-2"  name="hot" type="checkbox" value="true">
+  <label class="ml-3">Hot</label>
+  </div>
+    </div>
 </div>
 
 <div class="form-row justify-content-md-center " >
   <label >Orders</label>
 </div>
   <%=
-    row1_columns = [["col-md-4", [:Quantity, "text_input"]],["col-md-4", [:Volume, "text_input"]],["col-md-2", [:Remove, "remove"]]]
+    row1_columns = [["col-md-4", [:Quantity, "text_input"]],["col-md-4", [:Volume, "text_input"]]]
     row1 = ["form-row justify-content-md-center mt-2", row1_columns]
     row2_column1 = ["col-md-6", [:Bottles, "checkbox", :Jars, "checkbox", :Roll_ons, "checkbox", :Tubes, "checkbox"]]
     row2_column2 = ["col-md-5", [:Aluminum, "checkbox", :Glass, "checkbox", :Plastic, "checkbox"]]
     row2_columns = [row2_column1, row2_column2]
     row2 = ["form-row justify-content-md-end mt-2", row2_columns]
     orders f, :orders, [row1, row2] %>
-    <%= order_add_button f, :orders %>
+    <%= order_add_button f, :orders, [row1, row2] %>
 
 
   <div class="form-group">
@@ -85,27 +83,25 @@
     <%= textarea f, :Comments%>
   </div>
 
-
   <%= submit "Save" %>
 <% end %>
 
-<button onclick="myFunction()">Try it</button>
-
-
-
 <script>
-var count = 1;
-function myFunction() {
-  var itm = document.getElementById("lead_orders_0");
-  var cln = itm.cloneNode(true);
-  cln.id = "lead_orders_" + count;
-  count += 1;
-  document.getElementById("lead_orders_container").appendChild(cln);
-}
+function addElement() {
 
+Array.from(document.querySelectorAll(".add-form-field"))
+.forEach(el => {
+  el.onclick = ({target: {dataset}}) => {
+    let container = document.getElementById(dataset.container);
+    let index = container.dataset.index;
+    let newRow = dataset.prototype;
+    container.insertAdjacentHTML("beforeend",       newRow.replace(/__name__/g, index));
+    container.dataset.index = parseInt(container.dataset.index) + 1;
+  }
+});
+}
 function removeElement(elementId) {
-    // Removes an element from the document
-    var element = document.getElementById(elementId);
-    element.parentNode.removeChild(element);
+  var myobj = document.getElementById(elementId);
+  myobj.remove();
 }
 </script>
