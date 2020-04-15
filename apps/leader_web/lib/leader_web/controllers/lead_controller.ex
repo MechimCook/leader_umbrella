@@ -31,16 +31,11 @@ defmodule LeaderWeb.LeadController do
       {:ok, lead} ->
         conn
         |> put_flash(:info, "Lead created successfully.")
-        |> redirect(to: Routes.lead_path(conn, :show, lead))
+        |> redirect(to: Routes.lead_path(conn, :edit, lead))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
     end
-  end
-
-  def show(conn, %{"id" => id}) do
-    lead = Input.get_lead!(id)
-    render(conn, "show.html", lead: lead)
   end
 
   def edit(conn, %{"id" => id}) do
@@ -56,7 +51,7 @@ defmodule LeaderWeb.LeadController do
       {:ok, lead} ->
         conn
         |> put_flash(:info, "Lead updated successfully.")
-        |> redirect(to: Routes.lead_path(conn, :show, lead))
+        |> redirect(to: Routes.lead_path(conn, :index))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", lead: lead, changeset: changeset)

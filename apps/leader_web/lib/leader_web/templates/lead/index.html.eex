@@ -13,14 +13,12 @@
   <tbody>
 <%= for lead <- @leads do %>
     <tr>
-      <td><%= lead.company %></td>
-      <td><%= lead.first_name %></td>
-      <td><%= lead.last_name %></td>
-      <td><%= lead.state %></td>
-
+      <td onclick="window.location=' <%= Routes.lead_path(@conn, :edit, lead) %>';"><%= lead.company %></td>
+      <td onclick="window.location=' <%= Routes.lead_path(@conn, :edit, lead) %>';"><%= lead.first_name %></td>
+      <td onclick="window.location=' <%= Routes.lead_path(@conn, :edit, lead) %>';"><%= lead.last_name %></td>
+      <td onclick="window.location=' <%= Routes.lead_path(@conn, :edit, lead) %>';"><%= lead.state %></td>
       <td>
-        <span><%= link "Show", to: Routes.lead_path(@conn, :show, lead) %></span>
-        <span><%= link "Edit", to: Routes.lead_path(@conn, :edit, lead) %></span>
+
         <span><%= link "Delete", to: Routes.lead_path(@conn, :delete, lead), method: :delete, data: [confirm: "Are you sure?"] %></span>
       </td>
     </tr>
