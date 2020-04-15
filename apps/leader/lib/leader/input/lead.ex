@@ -10,6 +10,9 @@ defmodule Leader.Input.Lead do
     field :last_name, :string
     field :phone, :string
     field :state, :string
+    field :orders, :map
+    field :hot, :boolean
+    field :catalog, :boolean
 
     timestamps()
   end
@@ -17,7 +20,18 @@ defmodule Leader.Input.Lead do
   @doc false
   def changeset(lead, attrs) do
     lead
-    |> cast(attrs, [:company, :first_name, :last_name, :email, :phone, :state, :comments])
+    |> cast(attrs, [
+      :company,
+      :first_name,
+      :last_name,
+      :email,
+      :phone,
+      :state,
+      :comments,
+      :orders,
+      :hot,
+      :catalog
+    ])
     |> validate_format(:email, ~r/@/)
   end
 end

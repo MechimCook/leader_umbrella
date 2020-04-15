@@ -10,7 +10,9 @@ defmodule Leader.Repo.Migrations.CreateLeads do
       add :phone, :string
       add :state, :string
       add :comments, :string
-
+      add :orders, :map
+      add :hot, :boolean
+      add :catalog, :boolean
       timestamps()
     end
 
