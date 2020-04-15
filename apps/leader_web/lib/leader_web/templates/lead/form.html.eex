@@ -84,6 +84,7 @@
   </div>
 
   <%= submit "Save" %>
+  <button name = "continue" value = true type="submit">Add More</button>
 <% end %>
 
 <script>

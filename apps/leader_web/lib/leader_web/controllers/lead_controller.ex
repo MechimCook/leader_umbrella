@@ -14,6 +14,18 @@ defmodule LeaderWeb.LeadController do
     render(conn, "new.html", changeset: changeset)
   end
 
+  def create(conn, %{"lead" => lead_params, "continue" => _}) do
+    case Input.create_lead(lead_params) do
+      {:ok, lead} ->
+        conn
+        |> put_flash(:info, "Lead created successfully.")
+        |> redirect(to: Routes.lead_path(conn, :new))
+
+      {:error, %Ecto.Changeset{} = changeset} ->
+        render(conn, "new.html", changeset: changeset)
+    end
+  end
+
   def create(conn, %{"lead" => lead_params}) do
     case Input.create_lead(lead_params) do
       {:ok, lead} ->
