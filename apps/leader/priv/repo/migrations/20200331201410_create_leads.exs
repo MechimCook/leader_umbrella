@@ -9,6 +9,9 @@ defmodule Leader.Repo.Migrations.CreateLeads do
       add :email, :string
       add :phone, :string
       add :state, :string
+      add :address, :string
+      add :city, :string
+      add :zip, :string
       add :comments, :string
       add :orders, :map
       add :hot, :boolean

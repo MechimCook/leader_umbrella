@@ -10,6 +10,9 @@ defmodule Leader.Input.Lead do
     field :last_name, :string
     field :phone, :string
     field :state, :string
+    field :address, :string
+    field :city, :string
+    field :zip, :string
     field :orders, :map
     field :hot, :boolean
     field :catalog, :boolean
@@ -27,6 +30,9 @@ defmodule Leader.Input.Lead do
       :email,
       :phone,
       :state,
+      :address,
+      :city,
+      :zip,
       :comments,
       :orders,
       :hot,
