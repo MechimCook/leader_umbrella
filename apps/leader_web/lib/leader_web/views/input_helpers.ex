@@ -2,17 +2,14 @@ defmodule LeaderWeb.InputHelpers do
   use Phoenix.HTML
 
   def orders(form, field, rows) do
-    #
     values = Phoenix.HTML.Form.input_value(form, field) || [""]
-    #
     id = Phoenix.HTML.Form.input_id(form, field)
-
-    #
+    data_index = Enum.count(Phoenix.HTML.Form.input_value(form, :orders))
 
     content_tag :div,
       id: container_id(id),
       class: "form-group border rounded mt-2 mx-2",
-      data_index: 1 do
+      data_index: data_index do
       values
       |> Enum.with_index()
       |> Enum.map(fn {_value, index} ->
@@ -81,23 +78,31 @@ defmodule LeaderWeb.InputHelpers do
         :text_input
       end
 
-    values = Phoenix.HTML.Form.input_value(form, field) || [""]
     id = Phoenix.HTML.Form.input_id(form, field)
 
     if type == :checkbox do
+      value =
+        try do
+          Phoenix.HTML.Form.input_value(form, :orders)
+          |> Map.values()
+          |> Enum.at(index)
+          |> Map.get(Atom.to_string(field))
+        rescue
+          e in ArithmeticError -> ""
+        end
+
+      input_opts = [
+        name: new_field_name(form, index, field),
+        id: id,
+        value: value
+      ]
+
       content_tag :div,
-        class: "form-check form-check-inline",
-        data: [index: Enum.count(values)] do
+        class: "form-check form-check-inline" do
         new_id = id <> "_#{index}"
 
         [
-          content_tag :input,
-            class: "mt-2",
-            name: new_field_name(form, index, field),
-            id: new_id,
-            type: "checkbox",
-            value: "true" do
-          end,
+          apply(Phoenix.HTML.Form, :checkbox, [form, field, input_opts]),
           content_tag :label,
             class: "ml-3" do
             [to_string(field)]
@@ -105,13 +110,21 @@ defmodule LeaderWeb.InputHelpers do
         ]
       end
     else
-      content_tag :div,
-        data: [index: Enum.count(values)] do
-        new_id = id <> "_#{index}"
+      value =
+        try do
+          Phoenix.HTML.Form.input_value(form, :orders)
+          |> Map.values()
+          |> Enum.at(index)
+          |> Map.get(Atom.to_string(field))
+        rescue
+          e in ArithmeticError -> ""
+        end
 
+      content_tag :div do
         input_opts = [
           name: new_field_name(form, index, field),
-          id: new_id
+          id: id,
+          value: value
         ]
 
         [
@@ -148,6 +161,6 @@ defmodule LeaderWeb.InputHelpers do
   defp container_id(id), do: id <> "_container"
 
   defp new_field_name(form, index, field) do
-    "orders[#{index}][" <> Atom.to_string(field) <> "]"
+    "lead[orders][#{index}][" <> Atom.to_string(field) <> "]"
   end
 end

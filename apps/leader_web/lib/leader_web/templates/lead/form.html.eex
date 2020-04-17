@@ -31,7 +31,7 @@
   </div>
   <div class="form-group">
     <label for="inputAddress">Address</label>
-    <%= text_input f, :Address%>
+    <%= text_input f, :address%>
   </div>
 
   <div class="form-row">
@@ -51,17 +51,18 @@
 
   <div class="form-row" >
     <div class="form-group col-auto">
-<div class="form-check form-check-inline" data-index="1">
-  <input class="mt-2"  name="catalog" type="checkbox" value="true">
+<div class="form-check form-check-inline">
+  <%= checkbox f, :catalog%>
   <label class="ml-3">Catalog</label>
   </div>
     </div>
     <div class="form-group col-auto">
-<div class="form-check form-check-inline" data-index="1">
-  <input class="mt-2"  name="hot" type="checkbox" value="true">
+<div class="form-check form-check-inline">
+  <%= checkbox f, :hot%>
   <label class="ml-3">Hot</label>
   </div>
     </div>
+
 </div>
 
 <div class="form-row justify-content-md-center " >
@@ -80,7 +81,7 @@
 
   <div class="form-group">
     <label>Comments</label>
-    <%= textarea f, :Comments%>
+    <%= textarea f, :comments%>
   </div>
 
   <%= submit "Save" %>
