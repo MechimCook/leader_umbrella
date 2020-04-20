@@ -4,7 +4,13 @@ defmodule LeaderWeb.InputHelpers do
   def orders(form, field, rows) do
     values = Phoenix.HTML.Form.input_value(form, field) || [""]
     id = Phoenix.HTML.Form.input_id(form, field)
-    data_index = Enum.count(Phoenix.HTML.Form.input_value(form, :orders))
+
+    data_index =
+      if Phoenix.HTML.Form.input_value(form, :orders) != nil do
+        Enum.count(Phoenix.HTML.Form.input_value(form, :orders))
+      else
+        1
+      end
 
     content_tag :div,
       id: container_id(id),
@@ -89,6 +95,7 @@ defmodule LeaderWeb.InputHelpers do
           |> Map.get(Atom.to_string(field))
         rescue
           e in ArithmeticError -> ""
+          e in BadMapError -> ""
         end
 
       input_opts = [
@@ -118,6 +125,7 @@ defmodule LeaderWeb.InputHelpers do
           |> Map.get(Atom.to_string(field))
         rescue
           e in ArithmeticError -> ""
+          e in BadMapError -> ""
         end
 
       content_tag :div do
