@@ -22,13 +22,13 @@ def save_draft(lead, subject, body):
     contact.address_type = "SMTP"
     contact.display_type = DisplayType.MAIL_USER
     contact.object_type = ObjectType.MAIL_USER
-    # uses name if availiable, company if not, and email if none availiable
-    if lead.get('first_name') is not None:
-        if lead.get('last_name') is not None:
+    # uses name if availiable, company if not, and email if 'nil' availiable
+    if lead.get('first_name') != 'nil':
+        if lead.get('last_name') != 'nil':
             contact.display_name = lead.get('first_name').strip() + " " + lead.get('last_name').strip()
         else:
             contact.display_name = lead.get('first_name').strip()
-    elif lead.get('company') is not None:
+    elif lead.get('company') != 'nil':
         contact.display_name = lead.get('company').strip()
     else:
         contact.display_name = lead.get('email').strip()
@@ -54,9 +54,9 @@ def save_draft(lead, subject, body):
     message.store_support_masks.append(StoreSupportMask.CREATE)
 
     # build file name
-    if lead.get('company') is not None: #uses company name
+    if lead.get('company') is not 'nil': #uses company name
         file_name = lead.get('company')
-    elif lead.get('first_name') is not None: # if no company name uses contacts name
+    elif lead.get('first_name') is not 'nil': # if no company name uses contacts name
         file_name = lead.get('first_name')
     else:  # if nothing else availiable uses email
         file_name = lead.get('email')
@@ -77,15 +77,15 @@ def email_west(lead_keys, lead_values):
 
 
         # getting the email subject
-    if lead.get('company') is not None: #"company" = company name
+    if lead.get('company') != 'nil': #"company" = company name
         subject = lead.get('company') + default_subject
     else:
         subject = default_subject
 
     # getting the email greating
-    if lead.get('first_name') is not None: #if we have a first name
+    if lead.get('first_name') != 'nil': #if we have a first name
         greating = "Hi " + lead.get('first_name').strip() + default_greating
-    elif lead.get('company') is not None: #if we have a company name
+    elif lead.get('company') != 'nil': #if we have a company name
         greating = "Hi " + lead.get('company').strip() + default_greating
     else: # niether we just say hello
         greating = "Hello" + default_greating
@@ -117,7 +117,7 @@ def west_body(lead):
 
 
         # build the body
-    if lead.get('comments') is None: #if we have a first name
+    if lead.get('comments') != 'nil': #if we have a first name
         body = default_topic_intro + default_topic_body
     else: # niether we just say hello
         search_terms = lead.get('comments').upper().split(" ")
