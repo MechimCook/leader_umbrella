@@ -8,6 +8,27 @@ defmodule Leader.Input do
 
   alias Leader.Input.Lead
 
+  @west_states ['WY', 'CO', 'UT', 'NV', 'ID', 'CA', 'OR', 'WA', 'AK', 'MT', 'FL']
+  import Ecto.Query, only: [from: 2]
+
+  def create_emails_for_day(date) do
+    # date should be a day
+    query =
+      from lead in Lead,
+        where: fragment("?::date", lead.inserted_at) >= ^date,
+        select: lead
+
+    query
+    |> Repo.all()
+    |> Enum.reject(fn lead ->
+      Enum.member?(@west_states, lead.state) && lead.email == nil
+    end)
+    |> Enum.each(fn lead ->
+      Map.from_struct(lead)
+      |> ElixirPython.create_email()
+    end)
+  end
+
   @doc """
   Returns the list of leads.
 
