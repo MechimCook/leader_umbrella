@@ -1,13 +1,23 @@
-# lib/elixir_python_qrcode.ex
+# lib/ElixirPython.ex
 defmodule ElixirPython do
   @moduledoc """
   Documentation for ElixirPython.
   """
   alias Leader.Helper
 
-  # def python_thing() do
-  #   call_python(:module, :function, args)
-  # end
+  def create_email(lead) do
+    IO.inspect(Enum.into(Map.keys(lead), [], fn x -> Atom.to_string(x) end))
+    IO.inspect(Map.values(lead))
+
+    x =
+      call_python(:emailer, :email_west, [
+        Enum.into(Map.keys(lead), [], fn x -> Atom.to_string(x) end),
+        Map.values(lead)
+      ])
+
+    IO.inspect(x)
+    x
+  end
 
   defp default_instance() do
     # Load all modules in our priv/python directory

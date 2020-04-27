@@ -23,17 +23,17 @@ def save_draft(lead, subject, body):
     contact.display_type = DisplayType.MAIL_USER
     contact.object_type = ObjectType.MAIL_USER
     # uses name if availiable, company if not, and email if none availiable
-    if lead[3] is not None:
-        if lead[4] is not None:
-            contact.display_name = lead[3].strip() + " " + lead[4].strip()
+    if lead.get('first_name') is not None:
+        if lead.get('last_name') is not None:
+            contact.display_name = lead.get('first_name').strip() + " " + lead.get('last_name').strip()
         else:
-            contact.display_name = lead[3].strip()
-    elif lead[2] is not None:
-        contact.display_name = lead[2].strip()
+            contact.display_name = lead.get('first_name').strip()
+    elif lead.get('company') is not None:
+        contact.display_name = lead.get('company').strip()
     else:
-        contact.display_name = lead[6].strip()
+        contact.display_name = lead.get('email').strip()
 
-    contact.email_address = lead[6].strip()
+    contact.email_address = lead.get('email').strip()
     contact.recipient_type = RecipientType.TO
 
     veronica = Recipient()
@@ -54,32 +54,39 @@ def save_draft(lead, subject, body):
     message.store_support_masks.append(StoreSupportMask.CREATE)
 
     # build file name
-    if lead[2] is not None: #uses company name
-        file_name = lead[2]
-    elif lead[3] is not None: # if no company name uses contacts name
-        file_name = lead[3]
+    if lead.get('company') is not None: #uses company name
+        file_name = lead.get('company')
+    elif lead.get('first_name') is not None: # if no company name uses contacts name
+        file_name = lead.get('first_name')
     else:  # if nothing else availiable uses email
-        file_name = lead[6]
+        file_name = lead.get('email')
 
-    os.chdir('/Users/mechimcook/dev/Python-fun/leader/output/emails/')
+    os.chdir('/Users/mechimcook/dev/')
     message.save(file_name + ".msg")
 
     # Display Status
     print("Draft saved Successfully.")
 
 
-def email_west(lead):
+def email_west(lead_keys, lead_values):
+    lead = {}
+    count = 0
+    for key in lead_keys:
+            lead[str(key).strip("\'").replace("b\'", "")] = str(lead_values[count]).strip("\'").replace("b\'", "")
+            count += 1
+
+
         # getting the email subject
-    if lead[2] is not None: #2 = company name
-        subject = lead[2] + default_subject
+    if lead.get('company') is not None: #"company" = company name
+        subject = lead.get('company') + default_subject
     else:
         subject = default_subject
 
     # getting the email greating
-    if lead[3] is not None: #if we have a first name
-        greating = "Hi " + lead[3].strip() + default_greating
-    elif lead[2] is not None: #if we have a company name
-        greating = "Hi " + lead[2].strip() + default_greating
+    if lead.get('first_name') is not None: #if we have a first name
+        greating = "Hi " + lead.get('first_name').strip() + default_greating
+    elif lead.get('company') is not None: #if we have a company name
+        greating = "Hi " + lead.get('company').strip() + default_greating
     else: # niether we just say hello
         greating = "Hello" + default_greating
 
@@ -87,7 +94,7 @@ def email_west(lead):
     topic = west_body(lead)
 
     # getting conclusion
-    if lead[10] == 'CA': #if they are in CA
+    if lead.get('state') == 'CA': #if they are in CA
         conclusion = ca_conclusion + default_conclusion
     else:
         conclusion = default_conclusion
@@ -110,10 +117,10 @@ def west_body(lead):
 
 
         # build the body
-    if lead[11] is None: #if we have a first name
+    if lead.get('comments') is None: #if we have a first name
         body = default_topic_intro + default_topic_body
     else: # niether we just say hello
-        search_terms = lead[11].upper().split(" ")
+        search_terms = lead.get('comments').upper().split(" ")
         body = default_topic_intro + default_topic_body
 
 

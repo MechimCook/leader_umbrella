@@ -4,7 +4,12 @@ defmodule Leader.Helper do
     - path: directory to include in python path (charlist)
   """
   def python_instance(path) when is_list(path) do
-    {:ok, pid} = :python.start([{:python_path, to_charlist(path)}])
+    {:ok, pid} =
+      :python.start([
+        {:python, '/usr/local/opt/python/bin/python3.7'},
+        {:python_path, to_charlist(path)}
+      ])
+
     pid
   end
 
