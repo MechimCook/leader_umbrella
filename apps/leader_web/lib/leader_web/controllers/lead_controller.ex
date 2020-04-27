@@ -14,7 +14,16 @@ defmodule LeaderWeb.LeadController do
     render(conn, "new.html", changeset: changeset)
   end
 
-  def create(conn, %{"lead" => lead_params, "continue" => _}) do
+  def create_emails(conn, _params) do
+    Date.utc_today()
+    |> Input.create_emails_for_day()
+
+    conn
+    |> put_flash(:info, "Generating emails.")
+    |> redirect(to: Routes.lead_path(conn, :index))
+  end
+
+  def create(conn, %{"lead" => lead_params, "continue" => "true"}) do
     case Input.create_lead(lead_params) do
       {:ok, lead} ->
         conn
@@ -31,7 +40,7 @@ defmodule LeaderWeb.LeadController do
       {:ok, lead} ->
         conn
         |> put_flash(:info, "Lead created successfully.")
-        |> redirect(to: Routes.lead_path(conn, :edit, lead))
+        |> redirect(to: Routes.lead_path(conn, :index))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)

@@ -15,6 +15,12 @@ defmodule LeaderWeb.Router do
 
   scope "/", LeaderWeb do
     pipe_through :browser
+
+    scope "/leads" do
+      get "/emails", LeadController, :create_emails
+      resources "/", LeadController
+    end
+
     resources "/leads", LeadController
     get "/", PageController, :index
   end
