@@ -38,7 +38,8 @@ defmodule Leader.MixProject do
     [
       {:ecto_sql, "~> 3.0"},
       {:postgrex, ">= 0.0.0"},
-      {:jason, "~> 1.0"}
+      {:jason, "~> 1.0"},
+      {:erlport, "~> 0.9"}
     ]
   end
 
