@@ -37,7 +37,7 @@ def save_wb(east_excel, west_excel, middle_excel):
     wb.save('leads.xlsx')
 
 
-
+def create_book():
 # reads raw
 workbook = openpyxl.load_workbook('White.xlsx')
 raw = workbook.active
