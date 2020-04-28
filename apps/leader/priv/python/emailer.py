@@ -74,17 +74,16 @@ def email_west(lead_keys, lead_values, orders_keys, orders_values):
     orders= []
     count = 0
     for key in lead_keys:
-            lead[str(key).strip("\'").replace("b\'", "")] = str(lead_values[count]).strip("\'").replace("b\'", "")
+            lead[str(key).replace("b\'", "").strip("\'")] = str(lead_values[count]).replace("b\'", "").strip("\'")
             count += 1
 
     for value_set in orders_values:
 	       count = 0
 	       order = {}
 	       for key in orders_keys:
-		          order[str(key).strip("\'").replace("b\'", "")] = str(value_set[count]).strip("\'").replace("b\'", "")
+		          order[str(key).replace("b\'", "").strip("\'")] = str(value_set[count]).replace("b\'", "").strip("\'")
 		          count += 1
 	       orders.append(order)
-    print(orders)
 
 
         # getting the email subject
