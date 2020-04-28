@@ -68,12 +68,23 @@ def save_draft(lead, subject, body):
     print("Draft saved Successfully.")
 
 
-def email_west(lead_keys, lead_values):
+def email_west(lead_keys, lead_values, orders_keys, orders_values):
+    # order_values is a list of lists representing the orders values
     lead = {}
+    orders= []
     count = 0
     for key in lead_keys:
             lead[str(key).strip("\'").replace("b\'", "")] = str(lead_values[count]).strip("\'").replace("b\'", "")
             count += 1
+
+    for value_set in orders_values:
+	       count = 0
+	       order = {}
+	       for key in orders_keys:
+		          order[str(key).strip("\'").replace("b\'", "")] = str(value_set[count]).strip("\'").replace("b\'", "")
+		          count += 1
+	       orders.append(order)
+    print(orders)
 
 
         # getting the email subject

@@ -6,17 +6,29 @@ defmodule ElixirPython do
   alias Leader.Helper
 
   def create_email(lead) do
-    IO.inspect(Enum.into(Map.keys(lead), [], fn x -> Atom.to_string(x) end))
-    IO.inspect(Map.values(lead))
+    [order_keys, order_values] =
+      Map.get(lead, :orders)
+      |> Map.values()
+      |> format_order([])
 
-    x =
-      call_python(:emailer, :email_west, [
-        Enum.into(Map.keys(lead), [], fn x -> Atom.to_string(x) end),
-        Map.values(lead)
-      ])
+    call_python(:emailer, :email_west, [
+      Enum.into(Map.keys(lead), [], fn x -> Atom.to_string(x) end),
+      Map.values(lead),
+      order_keys,
+      order_values
+    ])
+  end
 
-    IO.inspect(x)
-    x
+  defp format_order([order | []], order_values) do
+    new_order_values = [Map.values(order)] ++ order_values
+
+    [Map.keys(order), new_order_values]
+  end
+
+  defp format_order([order | tail], order_values) do
+    new_order_values = [Map.values(order)] ++ order_values
+
+    format_order(tail, new_order_values)
   end
 
   defp default_instance() do
