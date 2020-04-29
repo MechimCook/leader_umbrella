@@ -63,9 +63,8 @@ def save_draft(lead, subject, body):
 
     os.chdir('/Users/mechimcook/dev/')
     message.save(file_name + ".msg")
-
     # Display Status
-    print("Draft saved Successfully.")
+    return "Draft saved Successfully."
 
 
 def email_west(lead_keys, lead_values, orders_keys, orders_values):
@@ -112,9 +111,6 @@ def email_west(lead_keys, lead_values, orders_keys, orders_values):
     body = greating + topic + conclusion
 
     save_draft(lead, subject, body)
-    print(subject)
-    print(body)
-    print(lead)
 
 
 
@@ -127,7 +123,7 @@ def west_body(lead):
 
 
         # build the body
-    if lead.get('comments') != 'nil': #if we have a first name
+    if lead.get('catalog') == 'True': #if we have a first name
         body = default_topic_intro + default_topic_body
     else: # niether we just say hello
         search_terms = lead.get('comments').upper().split(" ")
