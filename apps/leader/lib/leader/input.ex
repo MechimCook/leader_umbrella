@@ -72,7 +72,7 @@ defmodule Leader.Input do
     row = row(lead)
 
     if Map.values(lead.orders) != [] && lead.orders != nil do
-      row = [row] ++ generate_orders(Map.values(lead.orders), [])
+      [row] ++ generate_orders(Map.values(lead.orders), [])
     end
   end
 
