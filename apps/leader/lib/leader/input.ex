@@ -9,7 +9,37 @@ defmodule Leader.Input do
 
   alias Leader.Input.Lead
 
-  @west_states ['WY', 'CO', 'UT', 'NV', 'ID', 'CA', 'OR', 'WA', 'AK', 'MT', 'FL']
+  @west_states ["WY", "CO", "UT", "NV", "ID", "CA", "OR", "WA", "AK", "MT", "FL"]
+  @east_states [
+    "ME",
+    "NH",
+    "VT",
+    "NY",
+    "MA",
+    "RI",
+    "CT",
+    "NJ",
+    "PA",
+    "DE",
+    "MD",
+    "DC",
+    "MI",
+    "OH",
+    "IN",
+    "IL",
+    "WI",
+    "WV",
+    "VA",
+    "NC",
+    "TN",
+    "KY",
+    "SC",
+    "GA",
+    "AL",
+    "MS",
+    "FL"
+  ]
+
   import Ecto.Query, only: [from: 2]
 
   @lead_headers [
@@ -62,10 +92,48 @@ defmodule Leader.Input do
       leads
       |> Enum.reduce([], fn lead, rows -> generate_row(lead) ++ rows end)
 
-    IO.inspect(%Workbook{sheets: [%Sheet{name: "leads", rows: [@lead_headers] ++ rows}]})
+    sheets =
+      leads
+      |> Enum.reduce(
+        %{west: [], east: [], unsorted: []},
+        fn lead, sheets ->
+          [sheet_name, row] = sort_leads(lead)
 
-    %Workbook{sheets: [%Sheet{name: "Leads", rows: [@lead_headers] ++ rows}]}
+          {_, sheets} =
+            Map.get_and_update(sheets, sheet_name, fn old_value ->
+              {old_value, old_value ++ row}
+            end)
+
+          sheets
+        end
+      )
+      |> create_sheets()
+
+    IO.inspect(sheets)
+
+    %Workbook{sheets: sheets}
     |> Elixlsx.write_to("hello.xlsx")
+  end
+
+  defp create_sheets(sheet_rows) do
+    [
+      %Sheet{name: "East", rows: [@lead_headers] ++ sheet_rows.east},
+      %Sheet{name: "West", rows: [@lead_headers] ++ sheet_rows.west},
+      %Sheet{name: "Unsorted", rows: [@lead_headers] ++ sheet_rows.unsorted}
+    ]
+  end
+
+  defp sort_leads(lead) do
+    cond do
+      Enum.member?(@west_states, lead.state) ->
+        [:west, generate_row(lead)]
+
+      Enum.member?(@east_states, lead.state) ->
+        [:east, generate_row(lead)]
+
+      true ->
+        [:unsorted, generate_row(lead)]
+    end
   end
 
   defp generate_row(lead) do
