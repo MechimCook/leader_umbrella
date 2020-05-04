@@ -73,16 +73,27 @@ def email_west(lead_keys, lead_values, orders_keys, orders_values):
     orders= []
     count = 0
     for key in lead_keys:
-            lead[str(key).replace("b\'", "").strip("\'")] = str(lead_values[count]).replace("b\'", "").strip("\'")
-            count += 1
+        if isinstance(lead_values[count], bytes):
+            lead[key.decode('utf-8')] = lead_values[count].decode('utf-8')
+        count += 1
 
     for value_set in orders_values:
-	       count = 0
-	       order = {}
-	       for key in orders_keys:
-		          order[str(key).replace("b\'", "").strip("\'")] = str(value_set[count]).replace("b\'", "").strip("\'")
-		          count += 1
-	       orders.append(order)
+
+        count = 0
+        order = {}
+        for key in orders_keys:
+            if isinstance(value_set[count], list):
+                new_value_list = []
+                value_list = filter(lambda a: a != b'',  value_set[count])
+                for value in value_list:
+                    new_value_list.append(value.decode('utf-8'))
+                order[key.decode('utf-8')] = new_value_list
+            else:
+                order[key.decode('utf-8')] = value_set[count].decode('utf-8')
+            count += 1
+        orders.append(order)
+        print(orders)
+
 
 
         # getting the email subject
@@ -131,3 +142,8 @@ def west_body(lead):
 
 
     return body
+
+def build_order_body(order):
+
+
+    return order_info

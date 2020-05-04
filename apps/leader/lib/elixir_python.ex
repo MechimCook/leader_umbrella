@@ -9,6 +9,14 @@ defmodule ElixirPython do
     [order_keys, order_values] =
       Map.get(lead, :orders)
       |> Map.values()
+      |> Enum.reject(fn order ->
+        order == %{
+          "Materials" => ["", "", ""],
+          "Products" => ["", "", "", ""],
+          "Quantity" => "",
+          "Volume" => ""
+        }
+      end)
       |> format_order([])
 
     call_python(:emailer, :email_west, [
@@ -17,6 +25,10 @@ defmodule ElixirPython do
       order_keys,
       order_values
     ])
+  end
+
+  defp format_order([], order_values) do
+    [[], []]
   end
 
   defp format_order([order | []], order_values) do

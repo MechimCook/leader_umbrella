@@ -71,8 +71,8 @@
   <%=
     row1_columns = [["col-md-4", [:Quantity, "text_input"]],["col-md-4", [:Volume, "text_input"]]]
     row1 = ["form-row justify-content-md-center mt-2", row1_columns]
-    row2_column1 = ["col-md-6", [:Bottles, "checkbox", :Jars, "checkbox", :Roll_ons, "checkbox", :Tubes, "checkbox"]]
-    row2_column2 = ["col-md-5", [:Aluminum, "checkbox", :Glass, "checkbox", :Plastic, "checkbox"]]
+    row2_column1 = ["col-md-6", [[:Products, :Bottles], "checkbox", [:Products, :Jars], "checkbox", [:Products, :Roll_ons], "checkbox", [:Products, :Tubes], "checkbox"]]
+    row2_column2 = ["col-md-5", [[:Materials, :Aluminum], "checkbox", [:Materials, :Glass], "checkbox", [:Materials, :Plastic], "checkbox"]]
     row2_columns = [row2_column1, row2_column2]
     row2 = ["form-row justify-content-md-end mt-2", row2_columns]
     orders f, :orders, [row1, row2] %>

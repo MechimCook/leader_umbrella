@@ -84,24 +84,26 @@ defmodule LeaderWeb.InputHelpers do
         :text_input
       end
 
-    id = Phoenix.HTML.Form.input_id(form, field)
-
     if type == :checkbox do
+      [group, checked_value] = field
+      id = Phoenix.HTML.Form.input_id(form, group)
+
       value =
         try do
           Phoenix.HTML.Form.input_value(form, :orders)
           |> Map.values()
           |> Enum.at(index)
-          |> Map.get(Atom.to_string(field))
+          |> Map.get(Atom.to_string(group))
         rescue
           e in ArithmeticError -> ""
           e in BadMapError -> ""
         end
 
       input_opts = [
-        name: new_field_name(form, index, field),
+        name: new_field_name(form, index, group) <> "[]",
         id: id,
-        value: value
+        checked_value: to_string(checked_value),
+        unchecked_value: nil
       ]
 
       content_tag :div,
@@ -109,14 +111,16 @@ defmodule LeaderWeb.InputHelpers do
         new_id = id <> "_#{index}"
 
         [
-          apply(Phoenix.HTML.Form, :checkbox, [form, field, input_opts]),
+          apply(Phoenix.HTML.Form, :checkbox, [form, group, input_opts]),
           content_tag :label,
             class: "ml-3" do
-            [to_string(field)]
+            [to_string(checked_value)]
           end
         ]
       end
     else
+      id = Phoenix.HTML.Form.input_id(form, field)
+
       value =
         try do
           Phoenix.HTML.Form.input_value(form, :orders)
