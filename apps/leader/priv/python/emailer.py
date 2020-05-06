@@ -15,7 +15,6 @@ def save_draft(lead, subject, body):
     import os
 
 
-
     message = Message()
 # # TODO: strip earlier
     contact = Recipient()
@@ -92,7 +91,7 @@ def email_west(lead_keys, lead_values, orders_keys, orders_values):
                 order[key.decode('utf-8')] = value_set[count].decode('utf-8')
             count += 1
         orders.append(order)
-        print(orders)
+    lead.update({"orders": orders})
 
 
 
@@ -121,9 +120,43 @@ def email_west(lead_keys, lead_values, orders_keys, orders_values):
 
     body = greating + topic + conclusion
 
+    print(body)
+
     save_draft(lead, subject, body)
 
 
+def build_order_body(order):
+    quantity = order.get("Quantity")
+    volume = order.get("Volume")
+    materials = order.get("Materials")
+    products = order.get("Products")
+
+    order_info = "I see you're interested in "
+
+    if quantity != "":
+        order_info = order_info + quantity + " of our "
+    else:
+        order_info = order_info + "our "
+
+    if volume != "":
+        order_info = order_info + volume + " "
+
+    if len(materials) == 1:
+        order_info = order_info + materials[0] + " "
+    elif len(materials) == 2:
+        order_info = order_info + materials[0] + "s and " + materials[1] and "s"
+
+    if (len(products) == 0) and (quantity != ""):
+        order_info = order_info + "lines"
+    elif len(products) == 1:
+        order_info = order_info + products[0] + " "
+    elif len(products) == 2:
+        order_info = order_info + products[0] + " and " + products[1]
+    elif len(products) == 3:
+        order_info = order_info + products[0] + " and " + products[1] + " and " + products[2]
+    else:
+        order_info = order_info + " components"
+    return order_info + ". We have many options that may be what you're looking for. Including  \n\n"
 
 def west_body(lead):
     default_topic_intro = "We are currently working to action everyone's requests from the show and will do our very best to get any samples, pricing, and catalogs out to you as quickly as possible. "
@@ -140,10 +173,8 @@ def west_body(lead):
         search_terms = lead.get('comments').upper().split(" ")
         body = default_topic_intro + default_topic_body
 
+    if lead.get('orders') != []:
+        for order in lead.get('orders'):
+            body = body + "\n\n" + build_order_body(order)
 
     return body
-
-def build_order_body(order):
-
-
-    return order_info
