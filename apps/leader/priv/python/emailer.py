@@ -1,8 +1,3 @@
-default_greating = ",\n"+"\n"+"It was a pleasure to meet you at White Label Las Vegas last week! We appreciate you taking the time to visit the ABA Packaging booth and thank you for your interest in our products and services."
-default_subject = " WHITE LABEL LV 2020 FOLLOW UP FROM ABA PACKAGING"
-default_conclusion = "\nLooking forward to working with you!\nKindest,\n"
-ca_conclusion = "\nIn addition, please note I handle West Coast sales for ABA and work out of the SoCal area once a month. If I can be of service to you in any way, please do not hesitate to contact me. I am always happy to come by your offices or you are welcome to come to our showroom in Playa Vista."
-
 
 def save_draft(lead, subject, body):
     from independentsoft.msg import Message
@@ -21,7 +16,14 @@ def save_draft(lead, subject, body):
     contact.address_type = "SMTP"
     contact.display_type = DisplayType.MAIL_USER
     contact.object_type = ObjectType.MAIL_USER
-    # uses name if availiable, company if not, and email if 'nil' availiable
+
+
+    html_body = "<html><body><b>" + body + "</b></body></html>"
+    html_body_with_rtf = "{\\rtf1\\ansi\\ansicpg1252\\fromhtml1 \\htmlrtf0 " + html_body + "}"
+    rtf_body = html_body_with_rtf.encode("utf_8")
+
+
+    # todo only use firstname else say good afternoon
     if lead.get('first_name') != 'nil':
         if lead.get('last_name') != 'nil':
             contact.display_name = lead.get('first_name').strip() + " " + lead.get('last_name').strip()
@@ -44,7 +46,8 @@ def save_draft(lead, subject, body):
     veronica.recipient_type = RecipientType.CC
 
     message.subject = subject
-    message.body = body
+    message.body_html_text = html_body
+    message.body_rtf = rtf_body
     message.display_to = contact.display_name
     message.display_cc = veronica.display_name
     message.recipients.append(contact)
@@ -94,6 +97,9 @@ def email_west(lead_keys, lead_values, orders_keys, orders_values):
     lead.update({"orders": orders})
 
 
+    default_subject = " WHITE LABEL LV 2020 FOLLOW UP FROM ABA PACKAGING"
+    default_conclusion = "<br>Looking forward to working with you!<br>Kindest,<br>"
+    ca_conclusion = "<br>In addition, please note I handle West Coast sales for ABA and work out of the SoCal area once a month. If I can be of service to you in any way, please do not hesitate to contact me. I am always happy to come by your offices or you are welcome to come to our showroom in Playa Vista."
 
         # getting the email subject
     if lead.get('company') != 'nil': #"company" = company name
@@ -103,11 +109,9 @@ def email_west(lead_keys, lead_values, orders_keys, orders_values):
 
     # getting the email greating
     if lead.get('first_name') != 'nil': #if we have a first name
-        greating = "Hi " + lead.get('first_name').strip() + default_greating
-    elif lead.get('company') != 'nil': #if we have a company name
-        greating = "Hi " + lead.get('company').strip() + default_greating
+        greating = "Hi " + lead.get('first_name').strip() + ",<br>"
     else: # niether we just say hello
-        greating = "Hello" + default_greating
+        greating = "Good Afternoon,<br>"
 
     # build body
     topic = west_body(lead)
@@ -118,63 +122,61 @@ def email_west(lead_keys, lead_values, orders_keys, orders_values):
     else:
         conclusion = default_conclusion
 
-    body = greating + topic + conclusion
+    body = greating + topic + "<p>" + conclusion + "</p>"
 
-    print(body)
 
     save_draft(lead, subject, body)
 
 
-def build_order_body(order):
+def build_order_body(order, orders_number):
     quantity = order.get("Quantity")
     volume = order.get("Volume")
     materials = order.get("Materials")
     products = order.get("Products")
 
-    order_info = "I see you're interested in "
+    if orders_number == 0:
+        order_info = "I see you're interested in "
+    else:
+        order_info = "As well as"
+
 
     if quantity != "":
-        order_info = order_info + quantity + " of our "
+        order_info += quantity + " of our "
     else:
-        order_info = order_info + "our "
+        order_info += "our "
 
     if volume != "":
-        order_info = order_info + volume + " "
+        order_info += volume + " "
 
     if len(materials) == 1:
-        order_info = order_info + materials[0] + " "
+        order_info += materials[0] + " "
     elif len(materials) == 2:
-        order_info = order_info + materials[0] + "s and " + materials[1] and "s"
+        order_info += materials[0] + "s and " + materials[1] and "s"
 
     if (len(products) == 0) and (quantity != ""):
-        order_info = order_info + "lines"
+        order_info += "lines"
     elif len(products) == 1:
-        order_info = order_info + products[0] + " "
+        order_info += products[0] + " "
     elif len(products) == 2:
-        order_info = order_info + products[0] + " and " + products[1]
+        order_info += products[0] + " and " + products[1]
     elif len(products) == 3:
-        order_info = order_info + products[0] + " and " + products[1] + " and " + products[2]
+        order_info += products[0] + " and " + products[1] + " and " + products[2]
     else:
-        order_info = order_info + " components"
-    return order_info + ". We have many options that may be what you're looking for. Including  \n\n"
+        order_info += " components"
+    return "<p>" + order_info + ". We have many options that may be what you're looking for. Including [Add info on " + quantity + " " + volume + " ".join(materials) + " " + " ".join(products) + "]"
 
 def west_body(lead):
+    default_greating = "It was a pleasure to meet you at White Label Las Vegas last week! We appreciate you taking the time to visit the ABA Packaging booth and thank you for your interest in our products and services."
     default_topic_intro = "We are currently working to action everyone's requests from the show and will do our very best to get any samples, pricing, and catalogs out to you as quickly as possible. "
     default_topic_body = "ABA Packaging now offers a wide variety of eco-friendly primary packaging options including Aluminum bottles and PCR bottles, jars and tubes. You can always see our many stock products at www.abapackaging.com."
     # additional topics
     topic_catalog = "We also have many new additions to our catalog and you will be receiving one in the mail in the coming weeks. "
-    topic_jar = "Many of our offerings can be found on our website - link as follows: https://abapackaging.com/collections/jar-collection"
 
-
-        # build the body
-    if lead.get('catalog') == 'True': #if we have a first name
-        body = default_topic_intro + default_topic_body
-    else: # niether we just say hello
-        search_terms = lead.get('comments').upper().split(" ")
-        body = default_topic_intro + default_topic_body
+    body = "<p>" + default_greating + default_topic_intro + default_topic_body + topic_catalog + "</p>"
 
     if lead.get('orders') != []:
+        count = 0
         for order in lead.get('orders'):
-            body = body + "\n\n" + build_order_body(order)
-
+            body += build_order_body(order, count)
+            count += 1
     return body
