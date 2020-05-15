@@ -13,6 +13,28 @@ defmodule LeaderWeb.Router do
     plug :accepts, ["json"]
   end
 
+  pipeline :auth do
+    plug Leader.Auth.Pipeline
+  end
+
+  pipeline :ensure_auth do
+    plug Guardian.Plug.EnsureAuthenticated
+  end
+
+  # Maybe logged in scope
+  scope "/", LeaderWeb do
+    pipe_through [:browser, :auth]
+    get "/", AuthController, :index
+    post "/", AuthController, :login
+    post "/logout", AuthController, :logout
+  end
+
+  # Definitely logged in scope
+  scope "/secret", LeaderWeb do
+    pipe_through [:browser, :auth, :ensure_auth]
+    get "/", AuthController, :secret
+  end
+
   scope "/", LeaderWeb do
     pipe_through :browser
 
@@ -22,7 +44,6 @@ defmodule LeaderWeb.Router do
     end
 
     resources "/leads", LeadController
-    get "/", PageController, :index
   end
 
   # Other scopes may use custom stacks.

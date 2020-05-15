@@ -95,8 +95,8 @@ defmodule LeaderWeb.InputHelpers do
           |> Enum.at(index)
           |> Map.get(Atom.to_string(group))
         rescue
-          e in ArithmeticError -> ""
-          e in BadMapError -> ""
+          _e in ArithmeticError -> ""
+          _e in BadMapError -> ""
         end
 
       input_opts = [
@@ -128,8 +128,8 @@ defmodule LeaderWeb.InputHelpers do
           |> Enum.at(index)
           |> Map.get(Atom.to_string(field))
         rescue
-          e in ArithmeticError -> ""
-          e in BadMapError -> ""
+          _e in ArithmeticError -> ""
+          _e in BadMapError -> ""
         end
 
       content_tag :div do
