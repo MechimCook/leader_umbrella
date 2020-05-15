@@ -40,7 +40,10 @@ defmodule Leader.MixProject do
       {:postgrex, ">= 0.0.0"},
       {:jason, "~> 1.0"},
       {:erlport, "~> 0.9"},
-      {:elixlsx, "~> 0.4.2"}
+      {:elixlsx, "~> 0.4.2"},
+      {:guardian, "~> 1.0-beta"},
+      {:comeonin, "~> 4.0"},
+      {:bcrypt_elixir, "~> 0.12"}
     ]
   end
 
