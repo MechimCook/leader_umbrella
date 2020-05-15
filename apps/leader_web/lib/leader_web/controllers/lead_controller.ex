@@ -35,7 +35,7 @@ defmodule LeaderWeb.LeadController do
       end
 
     case Input.create_lead(lead_params) do
-      {:ok, lead} ->
+      {:ok, _lead} ->
         conn
         |> put_flash(:info, "Lead created successfully.")
         |> redirect(to: Routes.lead_path(conn, :new))
@@ -56,7 +56,7 @@ defmodule LeaderWeb.LeadController do
       end
 
     case Input.create_lead(lead_params) do
-      {:ok, lead} ->
+      {:ok, _lead} ->
         conn
         |> put_flash(:info, "Lead created successfully.")
         |> redirect(to: Routes.lead_path(conn, :index))
@@ -76,7 +76,7 @@ defmodule LeaderWeb.LeadController do
     lead = Input.get_lead!(id)
 
     case Input.update_lead(lead, lead_params) do
-      {:ok, lead} ->
+      {:ok, _lead} ->
         conn
         |> put_flash(:info, "Lead updated successfully.")
         |> redirect(to: Routes.lead_path(conn, :index))
