@@ -36,14 +36,12 @@ defmodule LeaderWeb.Router do
   end
 
   scope "/", LeaderWeb do
-    pipe_through :browser
+    pipe_through [:browser, :auth]
 
     scope "/leads" do
       get "/emails", LeadController, :create_emails
       resources "/", LeadController
     end
-
-    resources "/leads", LeadController
   end
 
   # Other scopes may use custom stacks.

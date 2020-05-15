@@ -24,6 +24,16 @@ defmodule LeaderWeb.LeadController do
   end
 
   def create(conn, %{"lead" => lead_params, "continue" => "true"}) do
+    # Add username if logged in
+    lead_params =
+      case Guardian.Plug.current_resource(conn) do
+        nil ->
+          lead_params
+
+        user ->
+          Map.put(lead_params, "user", user.username)
+      end
+
     case Input.create_lead(lead_params) do
       {:ok, lead} ->
         conn
@@ -36,6 +46,15 @@ defmodule LeaderWeb.LeadController do
   end
 
   def create(conn, %{"lead" => lead_params}) do
+    lead_params =
+      case Guardian.Plug.current_resource(conn) do
+        nil ->
+          lead_params
+
+        user ->
+          Map.put(lead_params, "user", user.username)
+      end
+
     case Input.create_lead(lead_params) do
       {:ok, lead} ->
         conn
