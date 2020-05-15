@@ -16,6 +16,7 @@ defmodule Leader.Repo.Migrations.CreateLeads do
       add :orders, :map
       add :hot, :boolean
       add :catalog, :boolean
+      add :user, :string
       timestamps()
     end
 

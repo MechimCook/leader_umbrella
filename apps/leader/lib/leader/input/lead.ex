@@ -16,6 +16,7 @@ defmodule Leader.Input.Lead do
     field :orders, :map
     field :hot, :boolean
     field :catalog, :boolean
+    field :user, :string
 
     timestamps()
   end
@@ -36,7 +37,8 @@ defmodule Leader.Input.Lead do
       :comments,
       :orders,
       :hot,
-      :catalog
+      :catalog,
+      :user
     ])
     |> validate_format(:email, ~r/@/)
   end
