@@ -1,6 +1,6 @@
 defmodule Leader.Excel do
   alias Elixlsx.{Workbook, Sheet}
-  @west_states ["WY", "CO", "UT", "NV", "ID", "CA", "OR", "WA", "AK", "MT", "FL"]
+  @west_states ["WY", "CO", "UT", "NV", "ID", "CA", "OR", "WA", "AK", "MT"]
   @east_states [
     "ME",
     "NH",
@@ -32,9 +32,10 @@ defmodule Leader.Excel do
   ]
 
   @lead_headers [
+    "Entered By",
     "Company",
-    "First_name",
-    "Last_name",
+    "First Name",
+    "Last Name",
     "Phone",
     "Email",
     "Address",
@@ -48,7 +49,7 @@ defmodule Leader.Excel do
   @products [
     "Bottles",
     "Jars",
-    "Roll_ons",
+    "Roll ons",
     "Tubes"
   ]
 
