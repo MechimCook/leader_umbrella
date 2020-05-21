@@ -32,18 +32,18 @@ defmodule Leader.Excel do
   ]
 
   @lead_headers [
-    "Entered By",
-    "Company",
-    "First Name",
-    "Last Name",
-    "Phone",
-    "Email",
-    "Address",
-    "City",
-    "State",
-    "Hot",
-    "Catalog",
-    "Comments"
+    ["Entered By", bold: true],
+    ["Company", bold: true],
+    ["First Name", bold: true],
+    ["Last Name", bold: true],
+    ["Phone", bold: true],
+    ["Email", bold: true],
+    ["Address", bold: true],
+    ["City", bold: true],
+    ["State", bold: true],
+    ["Hot", bold: true],
+    ["Catalog", bold: true],
+    ["Comments", bold: true]
   ]
 
   @products [
@@ -59,48 +59,67 @@ defmodule Leader.Excel do
     "Plastic"
   ]
   @order_headers [
-    "Volume",
-    "Quantity",
-    "Products",
-    "Materials"
+    ["Volume", bold: true],
+    ["Quantity", bold: true],
+    ["Products", bold: true],
+    ["Materials", bold: true]
   ]
 
   def excel_generator(leads) do
     # if not found is nil
     # cannot search a nil map
 
-    rows =
-      leads
-      |> Enum.reduce([], fn lead, rows -> generate_row(lead) ++ rows end)
-
     sheets =
       leads
       |> Enum.reduce(
-        %{west: [], east: [], unsorted: []},
-        fn lead, sheets ->
+        [%{west: [], east: [], unsorted: []}, %{west: [], east: [], unsorted: []}],
+        fn lead, [sheets, order_groups] ->
           [sheet_name, row] = sort_leads(lead)
+
+          order_start = Enum.count(Map.get(sheets, sheet_name)) + 4
 
           {_, sheets} =
             Map.get_and_update(sheets, sheet_name, fn old_value ->
               {old_value, old_value ++ row}
             end)
 
-          sheets
+          order_end = Enum.count(Map.get(sheets, sheet_name)) + 1
+
+          {_, order_groups} =
+            Map.get_and_update(order_groups, sheet_name, fn old_value ->
+              {old_value, old_value ++ [{order_start..order_end, collapsed: true}]}
+            end)
+
+          IO.inspect(order_groups)
+
+          [sheets, order_groups]
         end
       )
       |> create_sheets()
-
-    IO.inspect(sheets)
 
     %Workbook{sheets: sheets}
     |> Elixlsx.write_to("hello.xlsx")
   end
 
-  defp create_sheets(sheet_rows) do
+  defp create_sheets([sheet_rows, order_groups]) do
+    IO.inspect(order_groups)
+
     [
-      %Sheet{name: "East", rows: [@lead_headers] ++ sheet_rows.east},
-      %Sheet{name: "West", rows: [@lead_headers] ++ sheet_rows.west},
-      %Sheet{name: "Unsorted", rows: [@lead_headers] ++ sheet_rows.unsorted}
+      %Sheet{
+        name: "East",
+        rows: [@lead_headers] ++ sheet_rows.east,
+        group_rows: order_groups.east
+      },
+      %Sheet{
+        name: "West",
+        rows: [@lead_headers] ++ sheet_rows.west,
+        group_rows: order_groups.west
+      },
+      %Sheet{
+        name: "Unsorted",
+        rows: [@lead_headers] ++ sheet_rows.unsorted,
+        group_rows: order_groups.unsorted
+      }
     ]
   end
 
@@ -129,14 +148,9 @@ defmodule Leader.Excel do
     final_order_rows =
       case order do
         %{
-          "Aluminum" => "false",
-          "Bottles" => "false",
-          "Glass" => "false",
-          "Jars" => "false",
-          "Plastic" => "false",
+          "Products" => [],
+          "Materials" => [],
           "Quantity" => "",
-          "Roll_ons" => "false",
-          "Tubes" => "false",
           "Volume" => ""
         } ->
           order_rows
@@ -146,7 +160,8 @@ defmodule Leader.Excel do
       end
 
     if final_order_rows != [] do
-      [["Potental Orders"]] ++ [@order_headers] ++ [final_order_rows]
+      [[["Potental Orders", bold: true, color: "#0023ad"]]] ++
+        [@order_headers] ++ [final_order_rows]
     else
       final_order_rows
     end
@@ -155,14 +170,9 @@ defmodule Leader.Excel do
   defp generate_orders([order | tail], order_rows) do
     case order do
       %{
-        "Aluminum" => "false",
-        "Bottles" => "false",
-        "Glass" => "false",
-        "Jars" => "false",
-        "Plastic" => "false",
+        "Products" => [],
+        "Materials" => [],
         "Quantity" => "",
-        "Roll_ons" => "false",
-        "Tubes" => "false",
         "Volume" => ""
       } ->
         generate_orders(tail, order_rows)
@@ -177,7 +187,6 @@ defmodule Leader.Excel do
       @products
       |> Enum.reduce(fn product, products ->
         if Map.get(order, product) != "false" do
-          IO.inspect(Map.get(order, product))
           product <> ", " <> products
         else
           products
@@ -199,6 +208,7 @@ defmodule Leader.Excel do
 
   defp row(lead) do
     [
+      lead.user || "anon",
       lead.company,
       lead.first_name,
       lead.last_name,
@@ -214,10 +224,13 @@ defmodule Leader.Excel do
     |> Enum.map(fn x ->
       case x do
         nil ->
-          ""
+          "No"
 
         false ->
           "No"
+
+        true ->
+          "Yes"
 
         _ ->
           x
