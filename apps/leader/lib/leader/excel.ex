@@ -97,9 +97,15 @@ defmodule Leader.Excel do
       )
       |> create_sheets()
 
+    today = Date.utc_today()
 
     %Workbook{sheets: sheets}
-    |> Elixlsx.write_to("hello.xlsx")
+    |> Elixlsx.write_to(
+      "leads" <>
+        "_" <>
+        Integer.to_string(today.year) <>
+        "_" <> Integer.to_string(today.month) <> "_" <> Integer.to_string(today.day) <> ".xlsx"
+    )
   end
 
   defp create_sheets([sheet_rows, order_groups]) do
