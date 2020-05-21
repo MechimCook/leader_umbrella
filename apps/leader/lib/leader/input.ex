@@ -8,7 +8,7 @@ defmodule Leader.Input do
 
   alias Leader.Input.Lead
 
-  @west_states ["WY", "CO", "UT", "NV", "ID", "CA", "OR", "WA", "AK", "MT", "FL"]
+  @west_states ["WY", "CO", "UT", "NV", "ID", "CA", "OR", "WA", "AK", "MT"]
 
   import Ecto.Query, only: [from: 2]
 
