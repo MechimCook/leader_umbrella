@@ -25,5 +25,14 @@
 <% end %>
   </tbody>
 </table>
-
-<span><%= link "New Lead", to: Routes.lead_path(@conn, :new) %> <%= link "Save for day", to: Routes.lead_path(@conn, :create_emails) %></span>
+  <div class="row justify-content-center">
+     <div class="col justify-content-center">
+<%= link "New Lead", to: Routes.lead_path(@conn, :new) %>
+</div>
+ <div class="col justify-content-center">
+<%= link "Save for day", to: Routes.lead_path(@conn, :create_emails) %>
+</div>
+ <div class="col justify-content-center">
+<%= link "Export excel", to: Routes.lead_path(@conn, :export) %>
+</div>
+</div>

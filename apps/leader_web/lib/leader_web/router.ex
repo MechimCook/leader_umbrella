@@ -40,6 +40,7 @@ defmodule LeaderWeb.Router do
 
     scope "/leads" do
       get "/emails", LeadController, :create_emails
+      get "/export", LeadController, :export
       resources "/", LeadController
     end
   end

@@ -23,6 +23,14 @@ defmodule LeaderWeb.LeadController do
     |> redirect(to: Routes.lead_path(conn, :index))
   end
 
+  def export(conn, _params) do
+    Input.export()
+
+    conn
+    |> put_flash(:info, "Saving leads as excel file.")
+    |> redirect(to: Routes.lead_path(conn, :index))
+  end
+
   def create(conn, %{"lead" => lead_params, "continue" => "true"}) do
     # Add username if logged in
     lead_params =
