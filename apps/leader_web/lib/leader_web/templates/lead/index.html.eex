@@ -25,14 +25,14 @@
 <% end %>
   </tbody>
 </table>
-  <div class="row justify-content-center">
-     <div class="col justify-content-center">
+  <div class="row" style="flex-direction: row;">
+     <div class="col">
 <%= link "New Lead", to: Routes.lead_path(@conn, :new) %>
 </div>
- <div class="col justify-content-center">
+ <div class="col">
 <%= link "Save for day", to: Routes.lead_path(@conn, :create_emails) %>
 </div>
- <div class="col justify-content-center">
+ <div class="col">
 <%= link "Export excel", to: Routes.lead_path(@conn, :export) %>
 </div>
 </div>
