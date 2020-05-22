@@ -109,8 +109,6 @@ defmodule Leader.Excel do
   end
 
   defp create_sheets([sheet_rows, order_groups]) do
-    IO.inspect(order_groups)
-
     widths = %{
       1 => 20,
       2 => 20,
