@@ -88,19 +88,8 @@ defmodule LeaderWeb.InputHelpers do
       [group, checked_value] = field
       id = Phoenix.HTML.Form.input_id(form, group)
 
-      value =
-        try do
-          Phoenix.HTML.Form.input_value(form, :orders)
-          |> Map.values()
-          |> Enum.at(index)
-          |> Map.get(Atom.to_string(group))
-        rescue
-          _e in ArithmeticError -> ""
-          _e in BadMapError -> ""
-        end
-
       input_opts = [
-        name: new_field_name(form, index, group) <> "[]",
+        name: new_field_name(index, group) <> "[]",
         id: id,
         checked_value: to_string(checked_value),
         unchecked_value: nil
@@ -108,8 +97,6 @@ defmodule LeaderWeb.InputHelpers do
 
       content_tag :div,
         class: "form-check form-check-inline" do
-        new_id = id <> "_#{index}"
-
         [
           apply(Phoenix.HTML.Form, :checkbox, [form, group, input_opts]),
           content_tag :label,
@@ -134,7 +121,7 @@ defmodule LeaderWeb.InputHelpers do
 
       content_tag :div do
         input_opts = [
-          name: new_field_name(form, index, field),
+          name: new_field_name(index, field),
           id: id,
           value: value
         ]
@@ -172,7 +159,7 @@ defmodule LeaderWeb.InputHelpers do
 
   defp container_id(id), do: id <> "_container"
 
-  defp new_field_name(form, index, field) do
+  defp new_field_name(index, field) do
     "lead[orders][#{index}][" <> Atom.to_string(field) <> "]"
   end
 end

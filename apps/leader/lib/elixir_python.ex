@@ -27,7 +27,7 @@ defmodule ElixirPython do
     ])
   end
 
-  defp format_order([], order_values) do
+  defp format_order([], []) do
     [[], []]
   end
 
