@@ -90,7 +90,9 @@ defmodule LeaderWeb.LeadController do
         |> redirect(to: Routes.lead_path(conn, :index))
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "edit.html", lead: lead, changeset: changeset)
+        conn
+        |> put_flash(:info, "Something went wrong please try again.")
+        |> render("edit.html", lead: lead, changeset: changeset)
     end
   end
 

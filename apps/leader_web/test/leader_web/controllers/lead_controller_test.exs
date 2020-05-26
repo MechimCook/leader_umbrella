@@ -3,9 +3,33 @@ defmodule LeaderWeb.LeadControllerTest do
 
   alias Leader.Input
 
-  @create_attrs %{comments: "some comments", company: "some company", email: "some email", first_name: "some first_name", last_name: "some last_name", phone: "some phone", state: "some state"}
-  @update_attrs %{comments: "some updated comments", company: "some updated company", email: "some updated email", first_name: "some updated first_name", last_name: "some updated last_name", phone: "some updated phone", state: "some updated state"}
-  @invalid_attrs %{comments: nil, company: nil, email: nil, first_name: nil, last_name: nil, phone: nil, state: nil}
+  @create_attrs %{
+    comments: "some comments",
+    company: "some company",
+    email: "mechim@gmail.com",
+    first_name: "some first_name",
+    last_name: "some last_name",
+    phone: "some phone",
+    state: "some state"
+  }
+  @update_attrs %{
+    comments: "some updated comments",
+    company: "some updated company",
+    email: "mechim@gmail.com",
+    first_name: "some updated first_name",
+    last_name: "some updated last_name",
+    phone: "some updated phone",
+    state: "some updated state"
+  }
+  @invalid_attrs %{
+    comments: nil,
+    company: nil,
+    email: "not an email",
+    first_name: nil,
+    last_name: nil,
+    phone: nil,
+    state: nil
+  }
 
   def fixture(:lead) do
     {:ok, lead} = Input.create_lead(@create_attrs)
@@ -27,14 +51,14 @@ defmodule LeaderWeb.LeadControllerTest do
   end
 
   describe "create lead" do
-    test "redirects to show when data is valid", %{conn: conn} do
+    setup [:create_lead]
+
+    test "redirects to index when data is valid", %{conn: conn, lead: lead} do
       conn = post(conn, Routes.lead_path(conn, :create), lead: @create_attrs)
+      assert redirected_to(conn) == Routes.lead_path(conn, :index)
 
-      assert %{id: id} = redirected_params(conn)
-      assert redirected_to(conn) == Routes.lead_path(conn, :show, id)
-
-      conn = get(conn, Routes.lead_path(conn, :show, id))
-      assert html_response(conn, 200) =~ "Show Lead"
+      conn = get(conn, Routes.lead_path(conn, :edit, lead))
+      assert html_response(conn, 200) =~ "Edit Lead"
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
@@ -57,9 +81,9 @@ defmodule LeaderWeb.LeadControllerTest do
 
     test "redirects when data is valid", %{conn: conn, lead: lead} do
       conn = put(conn, Routes.lead_path(conn, :update, lead), lead: @update_attrs)
-      assert redirected_to(conn) == Routes.lead_path(conn, :show, lead)
+      assert redirected_to(conn) == Routes.lead_path(conn, :index)
 
-      conn = get(conn, Routes.lead_path(conn, :show, lead))
+      conn = get(conn, Routes.lead_path(conn, :edit, lead))
       assert html_response(conn, 200) =~ "some updated comments"
     end
 
@@ -75,8 +99,9 @@ defmodule LeaderWeb.LeadControllerTest do
     test "deletes chosen lead", %{conn: conn, lead: lead} do
       conn = delete(conn, Routes.lead_path(conn, :delete, lead))
       assert redirected_to(conn) == Routes.lead_path(conn, :index)
+
       assert_error_sent 404, fn ->
-        get(conn, Routes.lead_path(conn, :show, lead))
+        get(conn, Routes.lead_path(conn, :edit, lead))
       end
     end
   end
