@@ -54,7 +54,7 @@ defmodule ElixirPython do
 
   # wrapper function to call python functions using
   # default python instance
-  defp call_python(module, function, args \\ []) do
+  defp call_python(module, function, args) do
     default_instance()
     |> Helper.call_python(module, function, args)
   end
