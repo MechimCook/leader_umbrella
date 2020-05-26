@@ -6,9 +6,33 @@ defmodule Leader.InputTest do
   describe "leads" do
     alias Leader.Input.Lead
 
-    @valid_attrs %{comments: "some comments", company: "some company", email: "some email", first_name: "some first_name", last_name: "some last_name", phone: "some phone", state: "some state"}
-    @update_attrs %{comments: "some updated comments", company: "some updated company", email: "some updated email", first_name: "some updated first_name", last_name: "some updated last_name", phone: "some updated phone", state: "some updated state"}
-    @invalid_attrs %{comments: nil, company: nil, email: nil, first_name: nil, last_name: nil, phone: nil, state: nil}
+    @valid_attrs %{
+      comments: "some comments",
+      company: "some company",
+      email: "mechim@gmail.com",
+      first_name: "some first_name",
+      last_name: "some last_name",
+      phone: "some phone",
+      state: "some state"
+    }
+    @update_attrs %{
+      comments: "some updated comments",
+      company: "some updated company",
+      email: "mechim2@gmail.com",
+      first_name: "some updated first_name",
+      last_name: "some updated last_name",
+      phone: "some updated phone",
+      state: "some updated state"
+    }
+    @invalid_attrs %{
+      comments: nil,
+      company: nil,
+      email: "Not an email",
+      first_name: nil,
+      last_name: nil,
+      phone: nil,
+      state: nil
+    }
 
     def lead_fixture(attrs \\ %{}) do
       {:ok, lead} =
@@ -33,7 +57,7 @@ defmodule Leader.InputTest do
       assert {:ok, %Lead{} = lead} = Input.create_lead(@valid_attrs)
       assert lead.comments == "some comments"
       assert lead.company == "some company"
-      assert lead.email == "some email"
+      assert lead.email == "mechim@gmail.com"
       assert lead.first_name == "some first_name"
       assert lead.last_name == "some last_name"
       assert lead.phone == "some phone"
@@ -49,7 +73,7 @@ defmodule Leader.InputTest do
       assert {:ok, %Lead{} = lead} = Input.update_lead(lead, @update_attrs)
       assert lead.comments == "some updated comments"
       assert lead.company == "some updated company"
-      assert lead.email == "some updated email"
+      assert lead.email == "mechim2@gmail.com"
       assert lead.first_name == "some updated first_name"
       assert lead.last_name == "some updated last_name"
       assert lead.phone == "some updated phone"
